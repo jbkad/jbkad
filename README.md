@@ -1,4 +1,4 @@
-![Banner Image](./githubBanner.png)
+![Banner](./banner.png)
 
 # Hey, Joyce here 👋🏾
 
