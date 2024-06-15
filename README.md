@@ -9,6 +9,7 @@ I enjoy experimenting with new frameworks, libraries, and tools to stay ahead in
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) 
 ![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) 
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 When I'm not immersed in code, I enjoy gliding in my free time, which gives me a unique perspective and  keeps me in sync with nature. Flying not only provides a great balance to my work, but also fuels my creativity and problem-solving skills.
 
