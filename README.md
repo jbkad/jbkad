@@ -1,14 +1,16 @@
 ![Banner](./banner.png)
 
-# Hey, Joyce here 👋🏾
+I'm currently a full-stack Software Engineer at Imperial College London, where I build innovative digital products to meet a variety of business needs. My role involves everything from designing intuitive front-end interfaces to developing robust back-end services. 
 
-### I'm currently a <a href="https://blogs.imperial.ac.uk/imperial-people/2023/04/03/joyce-kadibu-software-developer-apprentice-information-and-communication-technologies/" target="blank">SWE Apprentice at Imperial College London</a>. I largely work in JavaScript, builiding digital products to fulfill various business needs. Find out more about my work <a href="https://linkedin.com/in/jbkad">on Linkedin</a>. 
+I enjoy experimenting with new frameworks, libraries, and tools to stay ahead in the fast-evolving tech landscape, but here are the technologies I've been using lately:
 
-#### Coding Experience:
-- JavaScript
-- TypeScript
-- React.js/Next.js
-- Golang
-- Python
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) 
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) 
+![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) 
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 
-### Away from work, my favourite pastime is gliding. Soaring the skies is a great way to destress away from the office ✈️.
+When I'm not immersed in code, I enjoy gliding in my free time, which gives me a unique perspective and  keeps me in sync with nature. Flying not only provides a great balance to my work, but also fuels my creativity and problem-solving skills.
+
+[portfolio/joycekadibu](https://joycekadibu.com) \
+[linkedin/jbkad](https://linkedin.com/in/jbkad/)
