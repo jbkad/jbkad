@@ -2,7 +2,7 @@
 
 I'm currently a full-stack Software Engineer at Imperial College London, where I build innovative digital products to meet a variety of business needs. My role involves everything from designing intuitive front-end interfaces to developing robust back-end services. 
 
-I enjoy experimenting with new frameworks, libraries, and tools to stay ahead in the fast-evolving tech landscape, but here are the technologies I've been using lately:
+I enjoy experimenting with new frameworks, libraries, and tools to stay ahead in the fast-evolving tech landscape. Here are the technologies I've been using lately:
 
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) 
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
