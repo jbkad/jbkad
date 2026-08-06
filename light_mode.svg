@@ -33,12 +33,13 @@ text, tspan {white-space: pre;}
 <tspan x="390" y="230">. Frameworks and Libraries: ............... React.js, Node.js, Express.js, Jest</tspan>
 <tspan x="390" y="250">. Data Management and APIs: ................ PostgreSQL, RESTful APIs, FastAPIs</tspan>
 <tspan x="390" y="270">. Other Languages: ..................................... English, French, BSL</tspan>
-<tspan x="390" y="290">. Tools and Design: ........... Docker, Postman, Tailwind, Bootstrap, Sass, Figma</tspan>
-<tspan x="390" y="310">. Interests: ........................................... Surfing, Gliding, Golf</tspan>
-<tspan x="390" y="350" class="hdr">- Contact ─────────────────────────────────────────────────────────────</tspan>
-<tspan x="390" y="370">. Site: ........................................................ joycekadibu.com</tspan>
-<tspan x="390" y="390">. LinkedIn: .............................................. linkedin.com/in/jbkad</tspan>
-<tspan x="390" y="410">. GitHub: ................................................... github.com/jbkad</tspan>
+<tspan x="390" y="290">. Tools: ............................................. Docker, Postman</tspan>
+<tspan x="390" y="310">. Design: ..................................... Tailwind, Bootstrap, Sass, Figma</tspan>
+<tspan x="390" y="330">. Interests: ........................................... Surfing, Gliding, Golf</tspan>
+<tspan x="390" y="370" class="hdr">- Contact ─────────────────────────────────────────────────────────────</tspan>
+<tspan x="390" y="390">. Site: ........................................................ joycekadibu.com</tspan>
+<tspan x="390" y="410">. LinkedIn: .............................................. linkedin.com/in/jbkad</tspan>
+<tspan x="390" y="430">. GitHub: ................................................... github.com/jbkad</tspan>
 <tspan x="390" y="470" class="hdr">- GitHub Stats ───────────────────────────────────────────────────────</tspan>
 <tspan x="390" y="490" class="cc">. </tspan><tspan class="key">Repos</tspan>:<tspan class="cc" id="repo_data_dots"> ..... </tspan><tspan class="value" id="repo_data">9</tspan> {<tspan class="key">Contributed</tspan>: <tspan class="value" id="contrib_data">10</tspan>} | <tspan class="key">Stars</tspan>:<tspan class="cc" id="star_data_dots"> ............. </tspan><tspan class="value" id="star_data">0</tspan>
 <tspan x="390" y="510" class="cc">. </tspan><tspan class="key">Commmits</tspan>:<tspan class="cc" id="commit_data_dots"> ................... </tspan><tspan class="value" id="commit_data">280</tspan> | <tspan class="key">Followers</tspan>:<tspan class="cc" id="follower_data_dots"> ......... </tspan><tspan class="value" id="follower_data">9</tspan>

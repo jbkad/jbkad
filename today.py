@@ -6,7 +6,7 @@ from lxml import etree
 import time
 import hashlib
 from io import BytesIO
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageFilter
 
 # Fine-grained personal access token with All Repositories access:
 # Account permissions: read:Followers, read:Starring, read:Watching
@@ -21,6 +21,7 @@ ASCII_X = 15
 ASCII_Y_START = 30
 ASCII_Y_STEP = 20
 ASCII_GRADIENT = " .'`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+ASCII_SILHOUETTE_GRADIENT = " .:-=+*#%@"
 PROFILE_IMAGE_URL = 'https://avatars.githubusercontent.com/u/135660293?v=4'
 ROW_WIDTH = 74
 
@@ -337,23 +338,34 @@ def valid_repo_edges(edges):
 
 def avatar_to_ascii_lines(avatar_url, width=ASCII_WIDTH, height=ASCII_HEIGHT):
     """
-    Fetches the GitHub avatar and converts it into fixed-size ASCII art.
+    Fetches the GitHub avatar and converts it into a high-contrast ASCII silhouette.
     """
     response = requests.get(avatar_url, timeout=20)
     response.raise_for_status()
     image = Image.open(BytesIO(response.content)).convert('L')
-    image = ImageOps.fit(image, (width, height), method=Image.Resampling.LANCZOS)
+    image = ImageOps.fit(image, (width, height), method=Image.Resampling.LANCZOS, centering=(0.5, 0.35))
     image = ImageOps.autocontrast(image)
-    image = ImageOps.equalize(image)
+    image = image.filter(ImageFilter.GaussianBlur(radius=0.7))
+    image = image.filter(ImageFilter.MedianFilter(size=3))
+
+    threshold = max(70, min(190, int(sum(image.getdata()) / (width * height)) - 12))
+    mask = image.point(lambda pixel: 255 if pixel < threshold else 0, mode='1')
+    mask = mask.filter(ImageFilter.MaxFilter(size=3))
+    mask = mask.filter(ImageFilter.MedianFilter(size=3))
 
     lines = []
-    gradient_max = len(ASCII_GRADIENT) - 1
+    gradient_max = len(ASCII_SILHOUETTE_GRADIENT) - 1
     for y in range(height):
         line = []
         for x in range(width):
+            if mask.getpixel((x, y)) == 0:
+                line.append(' ')
+                continue
+
             pixel = image.getpixel((x, y))
             char_index = int((255 - pixel) * gradient_max / 255)
-            line.append(ASCII_GRADIENT[char_index])
+            char_index = max(2, min(gradient_max, char_index))
+            line.append(ASCII_SILHOUETTE_GRADIENT[char_index])
         lines.append(''.join(line))
     return lines
 
