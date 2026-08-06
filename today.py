@@ -23,6 +23,7 @@ ASCII_Y_STEP = 20
 ASCII_GRADIENT = " .'`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 ASCII_SILHOUETTE_GRADIENT = " .:-=+*#%@"
 PROFILE_IMAGE_URL = 'https://avatars.githubusercontent.com/u/135660293?v=4'
+DISPLAY_NAME = 'Joyce Kadibu'
 ROW_WIDTH = 74
 
 
@@ -401,7 +402,7 @@ def svg_overwrite(filename, profile_data, age_data, commit_data, star_data, repo
     except Exception:
         pass
     justify_format(root, 'header_data', f"{profile_data['login']}@github")
-    find_and_replace(root, 'name_row', leader_row('Name', profile_data.get('name') or profile_data['login']))
+    find_and_replace(root, 'name_row', leader_row('Name', DISPLAY_NAME))
     justify_format(root, 'commit_data', commit_data, 22)
     justify_format(root, 'star_data', star_data, 14)
     justify_format(root, 'repo_data', repo_data, 6)
