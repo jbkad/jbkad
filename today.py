@@ -5,6 +5,8 @@ import os
 from lxml import etree
 import time
 import hashlib
+from io import BytesIO
+from PIL import Image, ImageOps
 
 # Fine-grained personal access token with All Repositories access:
 # Account permissions: read:Followers, read:Starring, read:Watching
@@ -13,6 +15,14 @@ import hashlib
 HEADERS = {'authorization': 'token '+ os.environ['ACCESS_TOKEN']}
 USER_NAME = os.environ['USER_NAME'] # 'jbkad'
 QUERY_COUNT = {'user_getter': 0, 'follower_getter': 0, 'graph_repos_stars': 0, 'recursive_loc': 0, 'graph_commits': 0, 'loc_query': 0}
+ASCII_WIDTH = 32
+ASCII_HEIGHT = 25
+ASCII_X = 15
+ASCII_Y_START = 30
+ASCII_Y_STEP = 20
+ASCII_GRADIENT = " .'`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+PROFILE_IMAGE_URL = 'https://avatars.githubusercontent.com/u/135660293?v=4'
+ROW_WIDTH = 74
 
 
 def daily_readme(birthday):
@@ -316,12 +326,61 @@ def stars_counter(data):
     return total_stars
 
 
-def svg_overwrite(filename, age_data, commit_data, star_data, repo_data, contrib_data, follower_data, loc_data):
+def avatar_to_ascii_lines(avatar_url, width=ASCII_WIDTH, height=ASCII_HEIGHT):
     """
-    Parse SVG files and update elements with my age, commits, stars, repositories, and lines written
+    Fetches the GitHub avatar and converts it into fixed-size ASCII art.
+    """
+    response = requests.get(avatar_url, timeout=20)
+    response.raise_for_status()
+    image = Image.open(BytesIO(response.content)).convert('L')
+    image = ImageOps.fit(image, (width, height), method=Image.Resampling.LANCZOS)
+    image = ImageOps.autocontrast(image)
+    image = ImageOps.equalize(image)
+
+    lines = []
+    gradient_max = len(ASCII_GRADIENT) - 1
+    for y in range(height):
+        line = []
+        for x in range(width):
+            pixel = image.getpixel((x, y))
+            char_index = int((255 - pixel) * gradient_max / 255)
+            line.append(ASCII_GRADIENT[char_index])
+        lines.append(''.join(line))
+    return lines
+
+
+def overwrite_ascii_art(root, lines):
+    """
+    Replaces the left-side ASCII block with generated avatar art.
+    """
+    ascii_nodes = root.xpath(".//*[local-name()='text' and @class='ascii']")
+    if not ascii_nodes:
+        return
+
+    ascii_node = ascii_nodes[0]
+    for child in list(ascii_node):
+        ascii_node.remove(child)
+
+    namespace = root.nsmap.get(None)
+    for index, line in enumerate(lines):
+        tspan = etree.SubElement(ascii_node, f"{{{namespace}}}tspan")
+        tspan.set('x', str(ASCII_X))
+        tspan.set('y', str(ASCII_Y_START + (index * ASCII_Y_STEP)))
+        tspan.text = line
+
+
+def svg_overwrite(filename, profile_data, age_data, commit_data, star_data, repo_data, contrib_data, follower_data, loc_data):
+    """
+    Parse SVG files and update elements with profile and GitHub stats data
     """
     tree = etree.parse(filename)
     root = tree.getroot()
+    try:
+        overwrite_ascii_art(root, avatar_to_ascii_lines(PROFILE_IMAGE_URL))
+    except Exception:
+        pass
+    justify_format(root, 'header_data', f"{profile_data['login']}@github")
+    find_and_replace(root, 'name_row', leader_row('Name', profile_data.get('name') or profile_data['login']))
     justify_format(root, 'commit_data', commit_data, 22)
     justify_format(root, 'star_data', star_data, 14)
     justify_format(root, 'repo_data', repo_data, 6)
@@ -348,6 +407,16 @@ def justify_format(root, element_id, new_text, length=0):
     else:
         dot_string = ' ' + ('.' * just_len) + ' '
     find_and_replace(root, f"{element_id}_dots", dot_string)
+
+
+def leader_row(label, value, width=ROW_WIDTH):
+    """
+    Builds a monospace row where the dots stop exactly before the value text.
+    """
+    left = f". {label}: "
+    value = str(value)
+    dots = '.' * max(2, width - len(left) - len(value))
+    return f"{left}{dots}{value}"
 
 
 def find_and_replace(root, element_id, new_text):
@@ -407,6 +476,43 @@ def follower_getter(username):
     return int(request.json()['data']['user']['followers']['totalCount'])
 
 
+def profile_getter(username):
+    """
+    Returns public profile details for the user.
+    """
+    query = '''
+    query($login: String!){
+        user(login: $login) {
+            login
+            avatarUrl
+            name
+            bio
+            company
+            location
+            websiteUrl
+            socialAccounts(first: 10) {
+                nodes {
+                    provider
+                    url
+                    displayName
+                }
+            }
+        }
+    }'''
+    request = simple_request(profile_getter.__name__, query, {'login': username})
+    return request.json()['data']['user']
+
+
+def social_url_getter(profile, provider_name):
+    """
+    Returns the first social URL matching the provider name.
+    """
+    for node in profile.get('socialAccounts', {}).get('nodes', []):
+        if node.get('provider', '').lower() == provider_name.lower():
+            return node.get('displayName') or node.get('url') or 'n/a'
+    return 'n/a'
+
+
 def query_count(funct_id):
     """
     Counts how many times the GitHub GraphQL API is called
@@ -449,6 +555,8 @@ if __name__ == '__main__':
     formatter('account data', user_time)
     age_data, age_time = perf_counter(daily_readme, datetime.datetime(2002, 7, 5))
     formatter('age calculation', age_time)
+    profile_data, profile_time = perf_counter(profile_getter, USER_NAME)
+    formatter('profile data', profile_time)
     total_loc, loc_time = perf_counter(loc_query, ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'], 7)
     formatter('LOC (cached)', loc_time) if total_loc[-1] else formatter('LOC (no cache)', loc_time)
     commit_data, commit_time = perf_counter(commit_counter, 7)
@@ -467,13 +575,13 @@ if __name__ == '__main__':
 
     for index in range(len(total_loc)-1): total_loc[index] = '{:,}'.format(total_loc[index]) # format added, deleted, and total LOC
 
-    svg_overwrite('dark_mode.svg', age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
-    svg_overwrite('light_mode.svg', age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
+    svg_overwrite('dark_mode.svg', profile_data, age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
+    svg_overwrite('light_mode.svg', profile_data, age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
 
     # move cursor to override 'Calculation times:' with 'Total function time:' and the total function time, then move cursor back
-    print('\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F',
-        '{:<21}'.format('Total function time:'), '{:>11}'.format('%.4f' % (user_time + age_time + loc_time + commit_time + star_time + repo_time + contrib_time)),
-        ' s \033[E\033[E\033[E\033[E\033[E\033[E\033[E\033[E', sep='')
+    print('\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F',
+        '{:<21}'.format('Total function time:'), '{:>11}'.format('%.4f' % (user_time + age_time + profile_time + loc_time + commit_time + star_time + repo_time + contrib_time)),
+        ' s \033[E\033[E\033[E\033[E\033[E\033[E\033[E\033[E\033[E', sep='')
 
     print('Total GitHub GraphQL API calls:', '{:>3}'.format(sum(QUERY_COUNT.values())))
     for funct_name, count in QUERY_COUNT.items(): print('{:<28}'.format('   ' + funct_name + ':'), '{:>6}'.format(count))
