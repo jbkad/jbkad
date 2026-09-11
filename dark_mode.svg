@@ -41,7 +41,7 @@ text, tspan {white-space: pre;}
 <tspan x="390" y="410">. LinkedIn: ..................................... linkedin.com/in/jbkad</tspan>
 <tspan x="390" y="430">. GitHub: ............................................ github.com/jbkad</tspan>
 <tspan x="390" y="470" class="hdr">- GitHub Stats ────────────────────────────────────────────────────────</tspan>
-<tspan x="390" y="490" class="cc">. </tspan><tspan class="key">Repos</tspan>:<tspan class="cc" id="repo_data_dots"> ..... </tspan><tspan class="value" id="repo_data">9</tspan> {<tspan class="key">Contributed</tspan>: <tspan class="value" id="contrib_data">10</tspan>} 
+<tspan x="390" y="490" class="cc">. </tspan><tspan class="key">Repos</tspan>:<tspan class="cc" id="repo_data_dots"> .... </tspan><tspan class="value" id="repo_data">10</tspan> {<tspan class="key">Contributed</tspan>: <tspan class="value" id="contrib_data">11</tspan>} 
 <tspan x="390" y="510" class="cc">. </tspan><tspan class="key">Commmits</tspan>:<tspan class="cc" id="commit_data_dots"> ................... </tspan><tspan class="value" id="commit_data">281</tspan> 
 </text>
 </svg>
